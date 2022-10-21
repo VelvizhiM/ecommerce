@@ -1,0 +1,58 @@
+npm init -y
+npm i awd-sdk
+
+https://375930431448.signin.aws.amazon.com/console
+AWS_KEY = "AKIAVPBZTE7MAZPEM4QA"
+AWS_SECRET ="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"
+AWS_BUCKET_NAME="drugcarts-gallery"
+
+S3 Bucket Create with Node.js
+*****************************
+const AWS = require('aws-sdk')
+const KEY_ID = "AKIAVPBZTE7MAZPEM4QA"
+const SECRET_KEY = "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"
+const AWS_BUCKET_NAME="drugcarts-gallery"
+const fs = require('fs')
+
+const s3 = new AWS.S3({
+    accessKeyId: KEY_ID,
+    secretAccessKey: SECRET_KEY,
+});
+
+const params = {
+    Bucket: AWS_BUCKET_NAME
+}
+
+s3.createBucket(params, (err, data) => {
+    if(err){
+        console.log(err)
+    }
+    else {
+        console.log("Bucket Created Successfully", data.Location);
+    }
+})
+
+const uploadFile = (filename) => {
+    const fileContent = fs.readFileSync(filename);
+
+    const params = {
+        Bucket: AWS_BUCKET_NAME,
+        Key: 'photo.jpg',
+        Body: fileContent,
+        ContentType:"image/JPG"
+    }
+
+    s3.upload(params, (err,data)=>{
+        if(err){
+        console.log(err)
+        }
+        else {
+            console.log("File Uploaded Successfully", data.Location);
+        }
+    })
+}
+
+uploadFile('My PIC.JPG')
+
+
+Velgit@1234
